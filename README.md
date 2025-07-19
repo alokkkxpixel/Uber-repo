@@ -92,3 +92,113 @@ curl -X POST http://localhost:3000/users/register \
 
 - Passwords are securely hashed before storing.
 - The returned token can be
+
+
+
+---
+
+## Endpoint: Login
+
+`POST /users/login`
+
+### Description
+
+Authenticates an existing user. Validates the request body, checks credentials, and returns a JWT token and user data on success.
+
+### Request Body
+
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "yourpassword"
+}
+```
+
+#### Field Requirements
+
+- `email` (string, required): Must be a valid email address.
+- `password` (string, required): Minimum 6 characters.
+
+
+## Responses
+
+- `user` (object):
+  - `fullname` (object).
+    - `firstname` (string): User's first name (minimum 3 characters).
+    - `lastname` (string): User's last name (minimum 3 characters).
+  - `email` (string): User's email address (must be a valid email).
+  - `password` (string): User's password (minimum 6 characters).
+- `token` (String): JWT Token
+
+### Success Response
+
+- **Status Code:** `200 OK`
+- **Body:**
+  ```json
+  {
+    "token": "<JWT_TOKEN>",
+    "user": {
+      "_id": "<USER_ID>",
+      "fullname": {
+        "firstName": "John",
+        "lastName": "Doe"
+      },
+      "email": "john.doe@example.com"
+      // other user fields
+    }
+  }
+  ```
+
+### Error Responses
+
+- **Invalid Email**
+  - **Status Code:** `401 Unauthorized`
+  - **Body:**
+    ```json
+    {
+      "messsage": "Invaild email "
+    }
+    ```
+
+- **Invalid Password**
+  - **Status Code:** `401 Unauthorized`
+  - **Body:**
+    ```json
+    {
+      "messsage": "Invaild  password"
+    }
+    ```
+
+- **Validation Error**
+  - **Status Code:** `400 Bad Request`
+  - **Body:**
+    ```json
+    {
+      "errors": [
+        {
+          "msg": "Error message",
+          "param": "field",
+          "location": "body"
+        }
+        // more errors
+      ]
+    }
+    ```
+
+---
+
+## Example Login Request
+
+```sh
+curl -X POST http://localhost:3000/users/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "john.doe@example.com",
+    "password": "yourpassword"
+  }'
+```
+
+## Notes
+
+- Passwords are securely hashed before storing.
+- The returned token can be used for authenticated requests.
