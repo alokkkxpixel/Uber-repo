@@ -202,3 +202,80 @@ curl -X POST http://localhost:3000/users/login \
 
 - Passwords are securely hashed before storing.
 - The returned token can be used for authenticated requests.
+
+
+## Endpoint: Profile
+
+`GET /users/profile`
+
+### Description
+
+Returns the authenticated user's profile information. This endpoint requires a valid JWT token to be sent in the request cookies or Authorization header.
+
+### Authentication
+
+- Send the JWT token in the `Authorization` header as `Bearer <token>`, or as a cookie named `token`.
+
+### Success Response
+
+- **Status Code:** `200 OK`
+- **Body:**
+  ```json
+  {
+    "_id": "<USER_ID>",
+    "fullname": {
+      "firstName": "John",
+      "lastName": "Doe"
+    },
+    "email": "john.doe@example.com"
+    // other user fields
+  }
+  ```
+
+### Error Response
+
+- **Status Code:** `401 Unauthorized`
+- **Body:**
+  ```json
+  {
+    "message": "Authentication required"
+  }
+  ```
+
+---
+
+## Endpoint: Logout
+
+`GET /users/logout`
+
+### Description
+
+Logs out the authenticated user by clearing the JWT token cookie and blacklisting the token. Requires the token to be sent in cookies or Authorization header.
+
+### Success Response
+
+- **Status Code:** `200 OK`
+- **Body:**
+  ```json
+  {
+    "messsage": "User successfully logout"
+  }
+  ```
+
+### Error Response
+
+- **Status Code:** `401 Unauthorized`
+- **Body:**
+  ```json
+  {
+    "message": "Authentication required"
+  }
+  ```
+
+---
+### Authentication
+
+- require  the JWT token in the `Authorization` header as `Bearer <token>`, or as a cookie named `token` to login  and access the profile
+
+
+...existing code...
