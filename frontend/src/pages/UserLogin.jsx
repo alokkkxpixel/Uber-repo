@@ -1,21 +1,47 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-
+import { UserDataContext } from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 const UserLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [UserData, setUserData] = useState({});
+  // const [userData, setUserData] = useState({});
 
-  const submitHandler = (e) => {
-    e.preventDefault(),
-      setUserData({
+  const { setUser } = useContext(UserDataContext);
+  const navigate = useNavigate();
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+
+    try {
+      const userData = {
         email: email,
         password: password,
-      });
-    console.log(UserData);
-    setEmail("");
-    setPassword("");
+      };
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/users/login`,
+        userData
+      );
+
+      if (response.status === 200) {
+        const data = response.data;
+        setUser(data.user);
+        localStorage.setItem("token", data.token);
+        navigate("/home");
+      } else {
+        console.log("Login failed. Server responded with:", response);
+      }
+
+      setEmail("");
+      setPassword("");
+    } catch (err) {
+      console.error("Login error:", err);
+      alert("Login failed. Please check credentials or backend connection.");
+    }
   };
+
   return (
     <div className="p-5 h-screen bg-[#eeee] flex flex-col  justify-between">
       <div>
