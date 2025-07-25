@@ -8,7 +8,7 @@ const UserProtectedWrapper = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  console.log(token);
+  // console.log(token);
 
   useEffect(() => {
     if (!token) {

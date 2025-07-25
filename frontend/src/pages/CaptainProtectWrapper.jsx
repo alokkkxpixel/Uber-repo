@@ -25,7 +25,7 @@ const CaptainProtectWrapper = ({ children }) => {
     .then((response) => {
       if (response.status === 200) {
         setCaptain(response.data.captain);
-        setisLoading(false);
+        // setisLoading(false);
         navigate("/captain-home");
       }
     })
@@ -34,9 +34,7 @@ const CaptainProtectWrapper = ({ children }) => {
       localStorage.removeItem("token");
       navigate("/captain-home");
     });
-  if (isLoading === true) {
-    return <div>Loading...</div>;
-  }
+  
 
   return <>{children}</>;
 };

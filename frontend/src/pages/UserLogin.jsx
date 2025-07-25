@@ -33,6 +33,7 @@ const UserLogin = () => {
       } else {
         console.log("Login failed. Server responded with:", response);
       }
+      console.log(response.status);
 
       setEmail("");
       setPassword("");

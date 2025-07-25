@@ -5,7 +5,7 @@ const blacklistTokenModel = require("../model/blackListToken.model");
 
 const registerUser = async (req, res, next) => {
   const errors = validationResult(req);
-  console.log("req.body ", req.body);
+  // console.log("req.body ", req.body);
 
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
