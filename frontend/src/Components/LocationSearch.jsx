@@ -1,7 +1,7 @@
 import React from "react";
 import { FaLocationDot } from "react-icons/fa6";
 import { IoSchoolSharp } from "react-icons/io5";
-const LocationSearch = () => {
+const LocationSearch = (prop) => {
   const Location = [
     {
       icon: <IoSchoolSharp />,
@@ -27,6 +27,10 @@ const LocationSearch = () => {
       {Location.map((item, index) => {
         return (
           <div
+            onClick={() => {
+              prop.setVehicalPannelOpen(true);
+              prop.setpannelOpen(false);
+            }}
             key={index}
             className="w-full  active:border my-3 bg-zinc-50 rounded-md p-1"
           >

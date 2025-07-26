@@ -4,14 +4,23 @@ import gsap from "gsap";
 import "remixicon/fonts/remixicon.css";
 import LocationSearch from "../Components/LocationSearch";
 import { MdPerson } from "react-icons/md";
+import VehiclePannel from "../Components/VehiclePannel";
+import ConfirmRidePannel from "../Components/ConfirmRidePannel";
+import LookingForDriver from "../Components/LookingForDriver";
 const Home = () => {
   const [Pickup, setPickup] = useState("");
   const [Destination, setDestination] = useState("");
   const pannelRef = useRef(null);
   const [pannelOpen, setpannelOpen] = useState(false);
   // const [pannelOpenArrow, setpannelOpenArrow] = useState(false);
-  // const [VehicalPannelOpen, setVehicalPannelOpen] = useState(true);
-  // const VehicalPannelRef = useRef(null);
+  const [VehicalPannelOpen, setVehicalPannelOpen] = useState(false);
+  const [ConfirmRide, setConfirmRide] = useState(false);
+  const [LookingDriver, setLookingDriver] = useState(false);
+  const VehicalPannelRef = useRef(null);
+  const VehicalPannelArrowRef = useRef(null);
+  const ConfirmRideArrowRef = useRef(null);
+  const ConfirmRideRef = useRef(null);
+  const LookingDriverRef = useRef(null);
   const ArrowDown = useRef(null);
   const submitHandler = (e) => {
     e.preventDefault();
@@ -41,19 +50,66 @@ const Home = () => {
     },
     [pannelOpen]
   );
-  // useGSAP(function () {
-  //   if (VehicalPannelOpen) {
-  //     gsap.to(VehicalPannelRef.current),
-  //       {
-  //         transform: "translateY(0)",
-  //       };
-  //   } else {
-  //     gsap.to(VehicalPannelRef.current),
-  //       {
-  //         transform: "translateY(100%)",
-  //       };
-  //   }
-  // });
+  useGSAP(
+    function () {
+      if (VehicalPannelOpen) {
+        gsap.to(VehicalPannelRef.current, {
+          transform: "translateY(0)",
+        });
+        gsap.to(VehicalPannelArrowRef.current, {
+          opacity: 1,
+        });
+      } else {
+        gsap.to(VehicalPannelRef.current, {
+          transform: "translateY(100%)",
+        });
+        gsap.to(VehicalPannelArrowRef.current, {
+          opacity: 0,
+        });
+      }
+    },
+    [VehicalPannelOpen]
+  );
+  useGSAP(
+    function () {
+      if (ConfirmRide) {
+        gsap.to(ConfirmRideRef.current, {
+          transform: "translateY(0)",
+        });
+        // gsap.to(VehicalPannelArrowRef.current, {
+        //   opacity: 1,
+        // });
+      } else {
+        gsap.to(ConfirmRideRef.current, {
+          transform: "translateY(100%)",
+        });
+        // gsap.to(VehicalPannelArrowRef.current, {
+        //   opacity: 0,
+        // });
+      }
+    },
+    [ConfirmRide]
+  );
+  useGSAP(
+    function () {
+      if (LookingDriver) {
+        gsap.to(LookingDriverRef.current, {
+          transform: "translateY(0)",
+        });
+        // gsap.to(VehicalPannelArrowRef.current, {
+        //   opacity: 1,
+        // });
+      } else {
+        gsap.to(LookingDriverRef.current, {
+          transform: "translateY(100%)",
+        });
+        // gsap.to(VehicalPannelArrowRef.current, {
+        //   opacity: 0,
+        // });
+      }
+    },
+    [LookingDriver]
+  );
   return (
     <div className="h-screen relative">
       <img
@@ -109,35 +165,36 @@ const Home = () => {
           </form>
         </div>
         <div ref={pannelRef} className="h-[%] bg-white overflow-auto ">
-          <LocationSearch />
+          <LocationSearch
+            setpannelOpen={setpannelOpen}
+            setVehicalPannelOpen={setVehicalPannelOpen}
+          />
         </div>
       </div>
       <div
-        //  ref={VehicalPannelRef}
+        ref={VehicalPannelRef}
         className="fixed translate-y-100 bg-white w-full p-3 bottom-0 z-10 py-8"
       >
-        <h4 className="text-2xl font-semibold mb-5">Choose your vehical</h4>
-        <div className="flex gap-2  items-center mb-4  px-2 rounded-lg  active:border-black  bg-gray-100">
-          <img
-            className="w-20"
-            src="https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_538,w_956/v1688398986/assets/90/34c200-ce29-49f1-bf35-e9d250e8217a/original/UberX.png"
-            alt=""
-          />
-          <div
-            className="flex flex-col items-start bg--200 py-3 w-1/2
-          "
-          >
-            <h4 className="text-xl  font-semibold">
-              UberGo
-              <span className="text-lg ml-2">
-                <i className="ri-user-fill"></i>3
-              </span>
-            </h4>
-            <h5 className="text-base font-semibold ">2min away</h5>
-            <p className="text-sm font-normal">Afforrble price and confort</p>
-          </div>
-          <h3 className="text-2xl font-semibold"> $193.20</h3>
-        </div>
+        <VehiclePannel
+          setConfirmRide={setConfirmRide}
+          VehicalPannelArrowRef={VehicalPannelArrowRef}
+          setVehicalPannelOpen={setVehicalPannelOpen}
+        />
+      </div>
+      <div
+        ref={ConfirmRideRef}
+        className="fixed translate-y-100 bg-white w-full p-3 bottom-0 z-10 py-8"
+      >
+        <ConfirmRidePannel
+          setLookingDriver={setLookingDriver}
+          setConfirmRide={setConfirmRide}
+        />
+      </div>
+      <div
+        ref={LookingDriverRef}
+        className="fixed translate-y-100 bg-white w-full p-3 bottom-0 z-10 py-8"
+      >
+        <LookingForDriver setLookingDriver={setLookingDriver} />
       </div>
     </div>
   );
