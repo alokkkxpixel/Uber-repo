@@ -7,6 +7,7 @@ import { MdPerson } from "react-icons/md";
 import VehiclePannel from "../Components/VehiclePannel";
 import ConfirmRidePannel from "../Components/ConfirmRidePannel";
 import LookingForDriver from "../Components/LookingForDriver";
+import WaitingForDriver from "../Components/WaitingForDriver";
 const Home = () => {
   const [Pickup, setPickup] = useState("");
   const [Destination, setDestination] = useState("");
@@ -16,11 +17,14 @@ const Home = () => {
   const [VehicalPannelOpen, setVehicalPannelOpen] = useState(false);
   const [ConfirmRide, setConfirmRide] = useState(false);
   const [LookingDriver, setLookingDriver] = useState(false);
+  const [WaitingDriver, setWaitingDriver] = useState(false);
   const VehicalPannelRef = useRef(null);
   const VehicalPannelArrowRef = useRef(null);
   const ConfirmRideArrowRef = useRef(null);
   const ConfirmRideRef = useRef(null);
   const LookingDriverRef = useRef(null);
+  const WaitingDriverRef = useRef(null);
+  const waitaingDriverArrowRef = useRef(null);
   const ArrowDown = useRef(null);
   const submitHandler = (e) => {
     e.preventDefault();
@@ -110,6 +114,26 @@ const Home = () => {
     },
     [LookingDriver]
   );
+  useGSAP(
+    function () {
+      if (WaitingDriver) {
+        gsap.to(WaitingDriverRef.current, {
+          transform: "translateY(0)",
+        });
+        // gsap.to(VehicalPannelArrowRef.current, {
+        //   opacity: 1,
+        // });
+      } else {
+        gsap.to(WaitingDriverRef.current, {
+          transform: "translateY(100%)",
+        });
+        // gsap.to(VehicalPannelArrowRef.current, {
+        //   opacity: 0,
+        // });
+      }
+    },
+    [WaitingDriver]
+  );
   return (
     <div className="h-screen relative">
       <img
@@ -194,7 +218,19 @@ const Home = () => {
         ref={LookingDriverRef}
         className="fixed translate-y-100 bg-white w-full p-3 bottom-0 z-10 py-8"
       >
-        <LookingForDriver setLookingDriver={setLookingDriver} />
+        <LookingForDriver
+          setWaitingDriver={setWaitingDriver}
+          setLookingDriver={setLookingDriver}
+        />
+      </div>
+      <div
+        ref={WaitingDriverRef}
+        className="fixed translate-y-100 bg-white w-full p-3 bottom-0 z-10 py-8"
+      >
+        <WaitingForDriver
+          waitaingDriverArrowRef={waitaingDriverArrowRef}
+          setWaitingDriver={setWaitingDriver}
+        />
       </div>
     </div>
   );

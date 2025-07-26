@@ -1,9 +1,10 @@
 import React from "react";
 import { FaHome } from "react-icons/fa";
 import { FaCreditCard, FaLocationDot } from "react-icons/fa6";
+import { RiStopMiniFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 
-const CaptainHome = () => {
+const Ridinguser = () => {
   return (
     <div className="h-screen">
       <div className="h-1/2 w-full relative  ">
@@ -74,4 +75,4 @@ const CaptainHome = () => {
   );
 };
 
-export default CaptainHome;
+export default Ridinguser;

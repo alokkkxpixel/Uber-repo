@@ -19,6 +19,9 @@ const LookingForDriver = (props) => {
       </h1>
       <div className="flex flex-col mb-5 items-center">
         <img
+          onClick={() => {
+            props.setWaitingDriver(true);
+          }}
           className="w-40 my-2"
           src="https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_538,w_956/v1688398986/assets/90/34c200-ce29-49f1-bf35-e9d250e8217a/original/UberX.png"
           alt=""
