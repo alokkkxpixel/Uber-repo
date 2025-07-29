@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useRef, useState } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 import { FaHome } from "react-icons/fa";
 import { FaCreditCard, FaLocationDot } from "react-icons/fa6";
 import { IoIosLogOut } from "react-icons/io";
@@ -7,8 +9,54 @@ import { LuNotebookText } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import CaptainDetails from "../Components/CaptainDetails";
 import Ridepop from "../Components/Ridepop";
+import ConfirmRidePop from "../Components/ConfirmRidePop";
 
 const CaptainHome = () => {
+  const [ridePopupPannel, setridePopupPannel] = useState(true);
+  const [ConfirmridePopupPannel, setConfirmridePopupPannel] = useState(false);
+  const RideRef = useRef(null);
+  const ConfirmRideRef = useRef(null);
+
+  useGSAP(
+    function () {
+      if (ConfirmridePopupPannel) {
+        gsap.to(ConfirmRideRef.current, {
+          transform: "translateY(0)",
+        });
+        // gsap.to(VehicalPannelArrowRef.current, {
+        //   opacity: 1,
+        // });
+      } else {
+        gsap.to(ConfirmRideRef.current, {
+          transform: "translateY(100%)",
+        });
+        // gsap.to(VehicalPannelArrowRef.current, {
+        //   opacity: 0,
+        // });
+      }
+    },
+    [ConfirmridePopupPannel]
+  );
+  useGSAP(
+    function () {
+      if (ridePopupPannel) {
+        gsap.to(RideRef.current, {
+          transform: "translateY(0)",
+        });
+        // gsap.to(VehicalPannelArrowRef.current, {
+        //   opacity: 1,
+        // });
+      } else {
+        gsap.to(RideRef.current, {
+          transform: "translateY(100%)",
+        });
+        // gsap.to(VehicalPannelArrowRef.current, {
+        //   opacity: 0,
+        // });
+      }
+    },
+    [ridePopupPannel]
+  );
   return (
     <div className="h-screen">
       <div className=" h-3/5 w-full relative  ">
@@ -35,8 +83,23 @@ const CaptainHome = () => {
       <div className="h-1/2 bg--300 py-5 px-3">
         <CaptainDetails />
       </div>
-      <div className="fixed  bg-white w-full p-3 bottom-0 z-10 py-8">
-        <Ridepop />
+      <div
+        ref={RideRef}
+        className="fixed w-full z-10 bottom-0 translate-y-100 bg-white px-3 py-10 pt-12"
+      >
+        <Ridepop
+          setConfirmridePopupPannel={setConfirmridePopupPannel}
+          setridePopupPannel={setridePopupPannel}
+        />
+      </div>
+      <div
+        ref={ConfirmRideRef}
+        className="fixed h-screen w-full z-10 bottom-0 translate-y-100 bg-white px-3 py-10 pt-12"
+      >
+        <ConfirmRidePop
+          setConfirmridePopupPannel={setConfirmridePopupPannel}
+          setridePopupPannel={setridePopupPannel}
+        />
       </div>
     </div>
   );

@@ -1,11 +1,11 @@
 import React from "react";
 
-const Ridepop = (props) => {
+const ConfirmRidePop = (props) => {
   return (
     <div>
       <h5 className="  absolute top-2 right-3 text-3xl">Y</h5>
       <h1 className="text-2xl capitalize font-semibold mb-4">
-        New Ride available!
+        confirm Ride available!
       </h1>
       <div className="flex items-center justify-between mt-4 bg-yellow-300 py-4 px-2 rounded-lg">
         <div className="flex items-center gap-3 ">
@@ -65,23 +65,23 @@ const Ridepop = (props) => {
       </div>
       <button
         onClick={() => {
-          props.setConfirmridePopupPannel(true);
           props.setridePopupPannel(false);
         }}
         className="w-full rounded-md bg-green-400 py-2 px-3 text-xl text-white font-semibold"
       >
-        Accept
+        Confirm Ride
       </button>
       <button
         onClick={() => {
+          props.setConfirmridePopupPannel(false);
           props.setridePopupPannel(false);
         }}
-        className="w-full mt-2 rounded-md bg-gray-300 py-2 px-3 text-xl text-zinc-700 font-semibold"
+        className="w-full mt-5 rounded-md bg-red-500 py-2 px-3 text-xl text-white font-semibold"
       >
-        ignore
+        Cancel
       </button>
     </div>
   );
 };
 
-export default Ridepop;
+export default ConfirmRidePop;
