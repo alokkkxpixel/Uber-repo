@@ -6,6 +6,7 @@ import { MdOutlineSpeed } from "react-icons/md";
 import { LuNotebookText } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import CaptainDetails from "../Components/CaptainDetails";
+import Ridepop from "../Components/Ridepop";
 
 const CaptainHome = () => {
   return (
@@ -33,6 +34,9 @@ const CaptainHome = () => {
       </div>
       <div className="h-1/2 bg--300 py-5 px-3">
         <CaptainDetails />
+      </div>
+      <div className="fixed  bg-white w-full p-3 bottom-0 z-10 py-8">
+        <Ridepop />
       </div>
     </div>
   );
