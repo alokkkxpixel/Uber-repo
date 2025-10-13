@@ -1,5 +1,5 @@
 const axios = require("axios");
-const { route } = require("../routes/maps.route");
+// const { route } = require("../routes/maps.route");
 
 module.exports.getAddressCoordinate = async (address) => {
   const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
@@ -69,5 +69,43 @@ module.exports.getDistanceAndTime = async (origin, destination, modes) => {
   } catch (err) {
     console.error("Radar API error:", err.response?.data || err.message);
     throw new Error("Error fetching data from Radar API");
+  }
+};
+
+module.exports.getAddressAutoComplete = async (input) => {
+  if (!input || input.length < 3) {
+    return { results: [], message: "Input too short" };
+  }
+
+  const apiKey = process.env.GEOAPIFY_API_KEY;
+  const url = `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(
+    input
+  )}&filter=countrycode:in&format=json&apiKey=${apiKey}`;
+
+  try {
+    const response = await axios.get(url);
+
+    if (response.data && response.data.results && response.data.results.length === 0) {
+      return { results: [], message: "No suggestions found" };
+    }
+
+    // Return formatted results with essential fields
+    return {
+      results: response.data.results.map(item => ({
+        name: item.name,
+        formatted: item.formatted,
+        address_line1: item.address_line1,
+        address_line2: item.address_line2,
+        city: item.city,
+        state: item.state,
+        postcode: item.postcode,
+        country: item.country,
+        lat: item.lat,
+        lon: item.lon
+      }))
+    };
+  } catch (err) {
+    console.error("Geoapify API error:", err.response?.data || err.message);
+    throw new Error("Error fetching data from Geoapify API");
   }
 };

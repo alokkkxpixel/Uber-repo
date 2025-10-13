@@ -5,6 +5,7 @@ const { query } = require("express-validator");
 const {
   getCoordinate,
   getDistaneTime,
+  getAddressAutoComplete,
 } = require("../controller/maps.controller");
 
 router.get(
@@ -24,5 +25,12 @@ router.get(
   query("modes").isString().notEmpty(),
   authUserMiddleware,
   getDistaneTime
+);
+
+router.get(
+  "/get-suggestions",
+  query("input").isString().notEmpty().isLength({ min: 2 }),
+  authUserMiddleware,
+  getAddressAutoComplete
 );
 module.exports = router;
