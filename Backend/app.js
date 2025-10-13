@@ -8,6 +8,7 @@ const app = express();
 
 const userRoutes = require("./routes/user.route");
 const captainRoutes = require("./routes/captain.route");
+const mapRoutes = require("./routes/maps.route");
 
 connectedToDB();
 app.use(cors());
@@ -22,5 +23,5 @@ app.get("/", (req, res) => {
 
 app.use("/users", userRoutes);
 app.use("/captain", captainRoutes);
-
+app.use("/maps", mapRoutes);
 module.exports = app;
