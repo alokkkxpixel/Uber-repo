@@ -17,6 +17,30 @@ async function getCoordinate(req, res, next) {
   }
 }
 
+async function getDistaneTime(req, res) {
+  try {
+    const { errors } = validationResult(req);
+
+    if (!errors.length === 0) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { origin, destination, modes } = req.query;
+
+    const result = await mapService.getDistanceAndTime(
+      origin,
+      destination,
+      modes
+    );
+
+    res.status(200).json({ result });
+  } catch (err) {
+    console.log(err);
+    throw new Error("Error fetching ");
+  }
+}
+
 module.exports = {
   getCoordinate,
+  getDistaneTime,
 };
