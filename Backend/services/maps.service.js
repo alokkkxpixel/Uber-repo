@@ -27,50 +27,83 @@ module.exports.getAddressCoordinate = async (address) => {
   }
 };
 
-module.exports.getDistanceAndTime = async (origin, destination, modes) => {
+module.exports.getDistanceAndTime = async (
+  origin,
+  destination,
+  vehicleType = "car"
+) => {
   if (!origin || !destination) {
     throw new Error("Origin and Destination are Required");
   }
-  const originCoords = await this.getAddressCoordinate(origin);
-
-  const destinationCoords = await this.getAddressCoordinate(destination);
-
-  const originStr = `${originCoords.lat},${originCoords.lng}`;
-  const destinationStr = `${destinationCoords.lat},${destinationCoords.lng}`;
-
-  const apiKey = process.env.RADAR_MAPS_API_KEY;
-  const url = `https://api.radar.io/v1/route/distance?origin=${encodeURIComponent(
-    originStr
-  )}&destination=${encodeURIComponent(
-    destinationStr
-  )}&modes=${encodeURIComponent(modes)}&units=metric`;
-
-  //  {
-  //   https://api.radar.io/v1/route/distance?origin=40.78382%2C-73.97536&destination=40.70390%2C-73.98670&modes=car&units=imperial" \
-  //  -H "Authorization: prj_test_pk_74520247973584def928f06f7b2d0d4acc7a739e
-  //  }
 
   try {
-    const response = await axios.get(url, {
-      headers: { Authorization: apiKey },
-    });
-    const modeData = response.data.routes[modes];
-    if (!modeData) {
-      throw new Error(`No route data found for mode: ${modes}`);
-    }
+    // Step 1: Geocode addresses to coordinates
+    const originCoords = await this.getAddressCoordinate(origin);
+    const destinationCoords = await this.getAddressCoordinate(destination);
 
-    return {
-      distance: modeData.distance.text,
-      distanceValue: modeData.distance.value,
-      duration: modeData.duration ? modeData.duration.text : undefined,
-      durationValue: modeData.duration ? modeData.duration.value : undefined,
-      routes: response.data.routes,
+    console.log("Origin coords:", originCoords);
+    console.log("Destination coords:", destinationCoords);
+
+    // Step 2: Map vehicle types to Geoapify modes
+    const modeMap = {
+      car: "drive",
+      auto: "drive",
+      moto: "motorcycle",
+      bike: "bicycle",
+      walk: "walk",
     };
+
+    const mode = modeMap[vehicleType] || "drive";
+
+    // Step 3: Build API request
+    const apiKey = process.env.GEOAPIFY_API_KEY;
+    const waypoints = `${originCoords.lat},${originCoords.lng}|${destinationCoords.lat},${destinationCoords.lng}`;
+    const url = `https://api.geoapify.com/v1/routing?waypoints=${waypoints}&mode=${mode}&apiKey=${apiKey}`;
+
+    console.log("Geoapify Routing URL:", url);
+
+    // Step 4: Make API request (NO Authorization header needed)
+    const response = await axios.get(url);
+
+    // Step 5: Parse response
+    if (
+      response.data &&
+      response.data.features &&
+      response.data.features.length > 0
+    ) {
+      const route = response.data.features[0].properties;
+
+      // Distance in meters, time in seconds
+      const distanceMeters = route.distance;
+      const durationSeconds = route.time;
+
+      // Convert to readable formats
+      const distanceKm = (distanceMeters / 1000).toFixed(1);
+      const durationMin = Math.round(durationSeconds / 60);
+      const durationHrs = Math.floor(durationMin / 60);
+      const durationMins = durationMin % 60;
+
+      return {
+        distance: `${distanceKm} km`,
+        distanceValue: distanceMeters,
+        duration:
+          durationHrs > 0
+            ? `${durationHrs} hrs ${durationMins} mins`
+            : `${durationMins} mins`,
+        durationValue: durationMin, // in minutes
+        mode: route.mode,
+        origin: origin,
+        destination: destination,
+      };
+    } else {
+      throw new Error("No route found between the locations");
+    }
   } catch (err) {
-    console.error("Radar API error:", err.response?.data || err.message);
-    throw new Error("Error fetching data from Radar API");
+    console.error("Geoapify API error:", err.response?.data || err.message);
+    throw new Error("Error fetching data from Geoapify API");
   }
 };
+
 
 module.exports.getAddressAutoComplete = async (input) => {
   if (!input || input.length < 3) {
