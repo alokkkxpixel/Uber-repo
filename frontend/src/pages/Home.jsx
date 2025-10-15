@@ -8,6 +8,7 @@ import VehiclePannel from "../Components/VehiclePannel";
 import ConfirmRidePannel from "../Components/ConfirmRidePannel";
 import LookingForDriver from "../Components/LookingForDriver";
 import WaitingForDriver from "../Components/WaitingForDriver";
+import axios from "axios";
 const Home = () => {
   const [Pickup, setPickup] = useState("");
   const [Destination, setDestination] = useState("");
@@ -18,6 +19,7 @@ const Home = () => {
   const [ConfirmRide, setConfirmRide] = useState(false);
   const [LookingDriver, setLookingDriver] = useState(false);
   const [WaitingDriver, setWaitingDriver] = useState(false);
+  const [fare, setFare] = useState({});
   const VehicalPannelRef = useRef(null);
   const VehicalPannelArrowRef = useRef(null);
   const ConfirmRideArrowRef = useRef(null);
@@ -29,7 +31,7 @@ const Home = () => {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    console.log(Pickup, Destination);
+    // console.log(Pickup, Destination);
   };
 
   useGSAP(
@@ -134,6 +136,25 @@ const Home = () => {
     },
     [WaitingDriver]
   );
+
+  async function FindTrip() {
+    setVehicalPannelOpen(true);
+    setpannelOpen(false);
+    const token = localStorage.getItem("token");
+    const response = await axios.get(
+      `${import.meta.env.VITE_BASE_URL}/rides/get-fare`,
+      {
+        params: { Pickup, Destination },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    // console.log(response.data.fare);
+    setFare(response.data.fare);
+  }
+
   return (
     <div className="h-screen relative">
       <img
@@ -186,12 +207,39 @@ const Home = () => {
               type="text"
               placeholder="Enter your Destination"
             />
+
+            {Pickup && Destination && (
+              <button
+                onClick={() => FindTrip()}
+                className="w-full bg-gradient-to-r from-black to-gray-800 text-white font-semibold py-4 px-6 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 active:scale-95 flex items-center justify-center gap-2"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"
+                  />
+                </svg>
+                Find Trip
+              </button>
+            )}
           </form>
         </div>
         <div ref={pannelRef} className="h-[%] bg-white overflow-auto ">
           <LocationSearch
             setpannelOpen={setpannelOpen}
             setVehicalPannelOpen={setVehicalPannelOpen}
+            Pickup={Pickup}
+            setPickup={setPickup}
+            Destination={Destination}
+            setDestination={setDestination}
           />
         </div>
       </div>
@@ -200,6 +248,7 @@ const Home = () => {
         className="fixed translate-y-100 bg-white w-full p-3 bottom-0 z-10 py-8"
       >
         <VehiclePannel
+          fare={fare}
           setConfirmRide={setConfirmRide}
           VehicalPannelArrowRef={VehicalPannelArrowRef}
           setVehicalPannelOpen={setVehicalPannelOpen}

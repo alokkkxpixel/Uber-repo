@@ -79,7 +79,7 @@ Send a JSON object with the following structure:
 ## Example Request
 
 ```sh
-curl -X POST http://localhost:3000/users/register \
+curl -X POST ${import.meta.env.VITE_BASE_URL}/users/register \
   -H "Content-Type: application/json" \
   -d '{
     "fullname": { "firstName": "John", "lastName": "Doe" },
@@ -190,7 +190,7 @@ Authenticates an existing user. Validates the request body, checks credentials, 
 ## Example Login Request
 
 ```sh
-curl -X POST http://localhost:3000/users/login \
+curl -X POST ${import.meta.env.VITE_BASE_URL}/users/login \
   -H "Content-Type: application/json" \
   -d '{
     "email": "john.doe@example.com",
@@ -374,7 +374,7 @@ Send a JSON object with the following structure:
 ### Example Request
 
 ```sh
-curl -X POST http://localhost:3000/captain/register \
+curl -X POST ${import.meta.env.VITE_BASE_URL}/captain/register \
   -H "Content-Type: application/json" \
   -d '{
     "fullname": { "firstName": "Jane", "lastName": "Smith" },
@@ -789,3 +789,88 @@ Per minute rates:
 - Auto: ₹2/min
 - Car: ₹3/min
 - Motorcycle: ₹1.5/min
+
+---
+
+## Get Fare Estimate
+
+### Endpoint
+
+`GET /ride/get-fare`
+
+### Description
+
+Calculates estimated fares for all vehicle types between given pickup and destination locations. The fare calculation includes base fare, distance-based charge, and time-based charge.
+
+### Query Parameters
+
+- `pickup` (string, required): Pickup location address. Minimum 3 characters.
+- `destination` (string, required): Drop-off location address. Minimum 3 characters.
+
+### Authentication
+
+Requires user authentication token.
+
+### Success Response
+
+- **Status Code:** `201 Created`
+- **Body:**
+  ```json
+  {
+    "response": {
+      "pickup": "MG Road, Bangalore",
+      "destination": "Indiranagar, Bangalore",
+      "distance": "5.2 km",
+      "duration": "15 mins",
+      "distanceValue": 5200,
+      "durationValue": 15,
+      "fare": {
+        "auto": 100,
+        "car": 150,
+        "moto": 80
+      }
+    }
+  }
+  ```
+
+### Error Responses
+
+- **Status Code:** `400 Bad Request`
+  ```json
+  {
+    "error": [
+      {
+        "msg": "Pickup address required",
+        "param": "pickup",
+        "location": "query"
+      }
+    ]
+  }
+  ```
+
+- **Status Code:** `500 Internal Server Error`
+  ```json
+  {
+    "message": "Error message details"
+  }
+  ```
+
+### Notes
+
+The fare estimation is calculated using:
+1. Base fare for each vehicle type:
+   - Auto: ₹30
+   - Car: ₹50
+   - Motorcycle: ₹20
+
+2. Per kilometer rates:
+   - Auto: ₹10/km
+   - Car: ₹15/km
+   - Motorcycle: ₹8/km
+
+3. Per minute rates:
+   - Auto: ₹2/min
+   - Car: ₹3/min
+   - Motorcycle: ₹1.5/min
+
+Final fare is rounded to the nearest whole number.

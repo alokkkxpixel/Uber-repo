@@ -25,3 +25,33 @@ module.exports.createRide = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+
+module.exports.getFareRide = async (req, res) => {
+  const error = validationResult(req);
+
+  if (!error.isEmpty()) {
+    return res.status(400).json({ error: error.array() });
+  }
+
+  try {
+    const { Pickup, Destination } = req.query;
+
+    const response = await rideService.getFare(Pickup, Destination);
+
+    res.status(201).json({
+      pickup: response.pickup,
+      destination: response.destination,
+      fare: {
+        auto: response.fare.auto,
+        car: response.fare.car,
+        moto: response.fare.moto,
+      },
+      distance: response.distance,
+      distanceValue: response.distanceValue,
+      duration: response.duration,
+    });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};

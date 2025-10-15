@@ -5,7 +5,7 @@ import { RiStopMiniFill } from "react-icons/ri";
 const LookingForDriver = (props) => {
   return (
     <div>
-      <h5 className="  absolute top-2 right-3 text-3xl">
+      <div className="absolute top-2 right-3 text-3xl">
         <h1
           onClick={() => {
             props.setLookingDriver(false);
@@ -13,7 +13,7 @@ const LookingForDriver = (props) => {
         >
           <i className="ri-arrow-down-wide-line"></i>
         </h1>
-      </h5>
+      </div>
       <h1 className="text-2xl capitalize font-semibold mb-4">
         Looking for a driver
       </h1>

@@ -30,7 +30,7 @@ const VehiclePannel = (props) => {
           "
         >
           <h4 className="text-xl  font-semibold">
-            UberGo
+            Uber Go
             <span className="text-lg ml-2">
               <i className="ri-user-fill"></i>3
             </span>
@@ -38,7 +38,7 @@ const VehiclePannel = (props) => {
           <h5 className="text-base font-semibold ">2min away</h5>
           <p className="text-sm font-normal">Afforrble price and confort</p>
         </div>
-        <h3 className="text-2xl font-semibold"> $193.20</h3>
+        <h3 className="text-2xl font-semibold">₹{props.fare.car}</h3>
       </div>
       <div
         onClick={() => {
@@ -49,15 +49,15 @@ const VehiclePannel = (props) => {
       >
         <img
           className="w-20"
-          src="https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_538,w_956/v1688398986/assets/90/34c200-ce29-49f1-bf35-e9d250e8217a/original/UberX.png"
-          alt=""
+          src="https://w7.pngwing.com/pngs/739/731/png-transparent-bajaj-auto-auto-rickshaw-car-india-auto-rickshaw-vintage-car-mode-of-transport-vehicle.png"
+          alt="Auto"
         />
         <div
           className="flex flex-col items-start bg--200 py-3 w-1/2
           "
         >
           <h4 className="text-xl  font-semibold">
-            UberGo
+            Uber Auto
             <span className="text-lg ml-2">
               <i className="ri-user-fill"></i>3
             </span>
@@ -65,7 +65,7 @@ const VehiclePannel = (props) => {
           <h5 className="text-base font-semibold ">2min away</h5>
           <p className="text-sm font-normal">Afforrble price and confort</p>
         </div>
-        <h3 className="text-2xl font-semibold"> $193.20</h3>
+        <h3 className="text-2xl font-semibold">₹{props.fare.auto}</h3>
       </div>
       <div
         onClick={() => {
@@ -76,15 +76,15 @@ const VehiclePannel = (props) => {
       >
         <img
           className="w-20"
-          src="https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_538,w_956/v1688398986/assets/90/34c200-ce29-49f1-bf35-e9d250e8217a/original/UberX.png"
-          alt=""
+          src="https://cn-geo1.uber.com/image-proc/crop/resizecrop/udam/format=auto/width=552/height=368/srcb64=aHR0cHM6Ly90Yi1zdGF0aWMudWJlci5jb20vcHJvZC91ZGFtLWFzc2V0cy9mY2RkZWNhYS0yZWVlLTQ4ZmUtODdmMC02MTRhYTdjZWU3ZDMucG5n"
+          alt="MoTo"
         />
         <div
           className="flex flex-col items-start bg--200 py-3 w-1/2
           "
         >
           <h4 className="text-xl  font-semibold">
-            UberGo
+            Uber Moto
             <span className="text-lg ml-2">
               <i className="ri-user-fill"></i>3
             </span>
@@ -92,7 +92,7 @@ const VehiclePannel = (props) => {
           <h5 className="text-base font-semibold ">2min away</h5>
           <p className="text-sm font-normal">Afforrble price and confort</p>
         </div>
-        <h3 className="text-2xl font-semibold"> $193.20</h3>
+        <h3 className="text-2xl font-semibold">₹{props.fare.moto}</h3>
       </div>
     </div>
   );
