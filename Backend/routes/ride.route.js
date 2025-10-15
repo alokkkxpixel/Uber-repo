@@ -8,11 +8,11 @@ router.post(
   "/create",
   authUserMiddleware,
 
-  body("pickup")
+  body("Pickup")
     .isString()
     .isLength({ min: 3 })
     .withMessage("Invaild pickup Address"),
-  body("destination")
+  body("Destination")
     .isString()
     .isLength({ min: 3 })
     .withMessage("Invaild destination address"),

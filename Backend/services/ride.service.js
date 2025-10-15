@@ -89,22 +89,26 @@ function getOtp(num) {
   return generateOtp(num);
 }
 
-async function createRide({ pickup, destination, userId, vehicleType }) {
-  if (!userId || !destination || !pickup || !vehicleType) {
+async function createRide({ Pickup, Destination, userId, vehicleType }) {
+  console.log(Pickup);
+  console.log(Destination);
+  console.log(userId);
+  console.log(vehicleType);
+  if (!userId || !Destination || !Pickup || !vehicleType) {
     throw new Error("All fields are required");
   }
 
   try {
     // Get fare details
-    const fareDetails = await getFare(pickup, destination, vehicleType);
+    const fareDetails = await getFare(Pickup, Destination, vehicleType);
 
     console.log("Fare Details:", fareDetails);
 
     // Create ride with the fare for selected vehicle type
     const ride = await rideModel.create({
       userId,
-      pickup,
-      destination,
+      Pickup,
+      Destination,
       otp: getOtp(6),
       vehicleType,
       fare: fareDetails.fare[vehicleType], // ✅ Correct way to access fare

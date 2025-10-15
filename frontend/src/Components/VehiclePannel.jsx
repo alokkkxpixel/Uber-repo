@@ -17,6 +17,7 @@ const VehiclePannel = (props) => {
         onClick={() => {
           props.setConfirmRide(true);
           props.setVehicalPannelOpen(false);
+          props.selectVehicle("car");
         }}
         className="flex gap-2  items-center mb-4  px-2 rounded-lg  active:border-black  bg-gray-100"
       >
@@ -44,6 +45,8 @@ const VehiclePannel = (props) => {
         onClick={() => {
           props.setConfirmRide(true);
           props.setVehicalPannelOpen(false);
+          props.selectVehicle("auto");
+
         }}
         className="flex gap-2  items-center mb-4  px-2 rounded-lg  active:border-black  bg-gray-100"
       >
@@ -71,6 +74,8 @@ const VehiclePannel = (props) => {
         onClick={() => {
           props.setConfirmRide(true);
           props.setVehicalPannelOpen(false);
+          props.selectVehicle("moto");
+
         }}
         className="flex gap-2  items-center mb-4  px-2 rounded-lg  active:border-black  bg-gray-100"
       >

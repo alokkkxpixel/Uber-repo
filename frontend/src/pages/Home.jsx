@@ -20,6 +20,10 @@ const Home = () => {
   const [LookingDriver, setLookingDriver] = useState(false);
   const [WaitingDriver, setWaitingDriver] = useState(false);
   const [fare, setFare] = useState({});
+  const [distance, setDistance] = useState(null);
+  const [duration, setDuration] = useState(null);
+  const [vehicleType, setVehicleType] = useState(null);
+  const [otp, setOtp] = useState(null);
   const VehicalPannelRef = useRef(null);
   const VehicalPannelArrowRef = useRef(null);
   const ConfirmRideArrowRef = useRef(null);
@@ -151,8 +155,30 @@ const Home = () => {
       }
     );
 
+    setDistance(response.data.distance);
+    setDuration(response.data.duration);
     // console.log(response.data.fare);
     setFare(response.data.fare);
+  }
+
+  async function createRide() {
+    const token = localStorage.getItem("token");
+
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/rides/create`,
+      {
+        Pickup,
+        Destination,
+        vehicleType,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    setOtp(response.data.ride.otp);
+    console.log(response.data);
   }
 
   return (
@@ -245,10 +271,11 @@ const Home = () => {
       </div>
       <div
         ref={VehicalPannelRef}
-        className="fixed translate-y-100 bg-white w-full p-3 bottom-0 z-10 py-8"
+        className="fixed translate-y-200 bg-white w-full p-3 bottom-0 z-10 py-8"
       >
         <VehiclePannel
           fare={fare}
+          selectVehicle={setVehicleType}
           setConfirmRide={setConfirmRide}
           VehicalPannelArrowRef={VehicalPannelArrowRef}
           setVehicalPannelOpen={setVehicalPannelOpen}
@@ -256,25 +283,39 @@ const Home = () => {
       </div>
       <div
         ref={ConfirmRideRef}
-        className="fixed translate-y-100 bg-white w-full p-3 bottom-0 z-10 py-8"
+        className="fixed translate-y-200 bg-white w-full p-3 bottom-0 z-10 py-8"
       >
         <ConfirmRidePannel
+          Pickup={Pickup}
+          Destination={Destination}
+          createRide={createRide}
+          distance={distance}
+          fare={fare}
+          duration={duration}
+          vehicleType={vehicleType}
           setLookingDriver={setLookingDriver}
           setConfirmRide={setConfirmRide}
         />
       </div>
       <div
         ref={LookingDriverRef}
-        className="fixed translate-y-100 bg-white w-full p-3 bottom-0 z-10 py-8"
+        className="fixed translate-y-200 bg-white w-full p-3 bottom-0 z-10 py-8"
       >
         <LookingForDriver
+          Pickup={Pickup}
+          Destination={Destination}
+          distance={distance}
+          fare={fare}
+          otp={otp}
+          duration={duration}
+          vehicleType={vehicleType}
           setWaitingDriver={setWaitingDriver}
           setLookingDriver={setLookingDriver}
         />
       </div>
       <div
         ref={WaitingDriverRef}
-        className="fixed translate-y-100 bg-white w-full p-3 bottom-0 z-10 py-8"
+        className="fixed translate-y-200 bg-white w-full p-3 bottom-0 z-10 py-8"
       >
         <WaitingForDriver
           waitaingDriverArrowRef={waitaingDriverArrowRef}
