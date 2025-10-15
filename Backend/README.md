@@ -516,3 +516,276 @@ Logs out the authenticated captain by clearing the JWT token cookie and blacklis
   {
     "message": "Authentication required"
     }
+}
+
+---
+
+# Maps API Documentation
+
+## 1. Get Coordinates
+
+### Endpoint
+
+`GET /maps/get-coordinate`
+
+### Description
+
+Converts an address into geographical coordinates (latitude and longitude).
+
+### Query Parameters
+
+- `address` (string, required): The address to geocode. Minimum 5 characters.
+
+### Authentication
+
+Requires user authentication token.
+
+### Success Response
+
+- **Status Code:** `200 OK`
+- **Body:**
+  ```json
+  {
+    "coordinate": {
+      "lat": 12.9715987,
+      "lng": 77.5945627
+    }
+  }
+  ```
+
+### Error Response
+
+- **Status Code:** `400 Bad Request`
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Address is required",
+        "param": "address",
+        "location": "query"
+      }
+    ]
+  }
+  ```
+
+- **Status Code:** `500 Internal Server Error`
+  ```json
+  {
+    "message": "Server Error"
+  }
+  ```
+
+## 2. Get Distance and Time
+
+### Endpoint
+
+`GET /maps/get-distance-time`
+
+### Description
+
+Calculates the distance and estimated travel time between two locations for different modes of transport.
+
+### Query Parameters
+
+- `origin` (string, required): Starting location. Minimum 5 characters.
+- `destination` (string, required): End location. Minimum 5 characters.
+- `modes` (string, required): Vehicle type ("car", "auto", "moto", "bike", "walk")
+
+### Authentication
+
+Requires user authentication token.
+
+### Success Response
+
+- **Status Code:** `200 OK`
+- **Body:**
+  ```json
+  {
+    "result": {
+      "distance": "5.2 km",
+      "distanceValue": 5200,
+      "duration": "15 mins",
+      "durationValue": 15,
+      "mode": "drive",
+      "origin": "MG Road, Bangalore",
+      "destination": "Indiranagar, Bangalore"
+    }
+  }
+  ```
+
+### Error Response
+
+- **Status Code:** `400 Bad Request`
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Invalid input",
+        "param": "origin/destination/modes",
+        "location": "query"
+      }
+    ]
+  }
+  ```
+
+## 3. Get Address Suggestions
+
+### Endpoint
+
+`GET /maps/get-suggestions`
+
+### Description
+
+Provides address autocompletion suggestions based on user input.
+
+### Query Parameters
+
+- `input` (string, required): Search text. Minimum 2 characters.
+
+### Authentication
+
+Requires user authentication token.
+
+### Success Response
+
+- **Status Code:** `200 OK`
+- **Body:**
+  ```json
+  {
+    "result": {
+      "results": [
+        {
+          "name": "Location Name",
+          "formatted": "Full formatted address",
+          "address_line1": "Street address",
+          "address_line2": "Area details",
+          "city": "City name",
+          "state": "State name",
+          "postcode": "Postal code",
+          "country": "Country name",
+          "lat": 12.9715987,
+          "lon": 77.5945627
+        }
+      ]
+    }
+  }
+  ```
+
+### Error Response
+
+- **Status Code:** `400 Bad Request`
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "Input too short",
+        "param": "input",
+        "location": "query"
+      }
+    ]
+  }
+  ```
+
+---
+
+# Ride API Documentation
+
+## Create Ride
+
+### Endpoint
+
+`POST /ride/create`
+
+### Description
+
+Creates a new ride request with fare calculation based on distance and duration.
+
+### Request Body
+
+```json
+{
+  "pickup": "MG Road, Bangalore",
+  "destination": "Indiranagar, Bangalore",
+  "vehicleType": "car"
+}
+```
+
+### Field Requirements
+
+- `pickup` (string, required): Pickup location address
+- `destination` (string, required): Drop-off location address
+- `vehicleType` (string, required): Type of vehicle ("car", "auto", "moto")
+
+### Authentication
+
+Requires user authentication token.
+
+### Success Response
+
+- **Status Code:** `201 Created`
+- **Body:**
+  ```json
+  {
+    "ride": {
+      "_id": "<RIDE_ID>",
+      "userId": "<USER_ID>",
+      "pickup": "MG Road, Bangalore",
+      "destination": "Indiranagar, Bangalore",
+      "otp": "123456",
+      "vehicleType": "car",
+      "fare": 150
+    },
+    "distance": "5.2 km",
+    "duration": "15 mins",
+    "fare": 150,
+    "allFares": {
+      "auto": 100,
+      "car": 150,
+      "moto": 80
+    }
+  }
+  ```
+
+### Error Responses
+
+- **Status Code:** `400 Bad Request`
+  ```json
+  {
+    "error": [
+      {
+        "msg": "All fields are required",
+        "param": "pickup/destination/vehicleType",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+
+- **Status Code:** `500 Internal Server Error`
+  ```json
+  {
+    "message": "Error message details"
+  }
+  ```
+
+### Fare Calculation
+
+The fare is calculated based on:
+- Base fare (varies by vehicle type)
+- Per kilometer rate
+- Per minute rate
+
+Base fares:
+- Auto: ₹30
+- Car: ₹50
+- Motorcycle: ₹20
+
+Per km rates:
+- Auto: ₹10/km
+- Car: ₹15/km
+- Motorcycle: ₹8/km
+
+Per minute rates:
+- Auto: ₹2/min
+- Car: ₹3/min
+- Motorcycle: ₹1.5/min
