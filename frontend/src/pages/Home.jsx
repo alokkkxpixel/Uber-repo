@@ -9,6 +9,10 @@ import ConfirmRidePannel from "../Components/ConfirmRidePannel";
 import LookingForDriver from "../Components/LookingForDriver";
 import WaitingForDriver from "../Components/WaitingForDriver";
 import axios from "axios";
+import { useContext } from "react";
+import { SocketContext } from "../context/SocketContext";
+import { useEffect } from "react";
+import { UserDataContext } from "../context/UserContext";
 const Home = () => {
   const [Pickup, setPickup] = useState("");
   const [Destination, setDestination] = useState("");
@@ -32,6 +36,24 @@ const Home = () => {
   const WaitingDriverRef = useRef(null);
   const waitaingDriverArrowRef = useRef(null);
   const ArrowDown = useRef(null);
+
+
+
+
+  const { socket} = useContext(SocketContext)
+
+    const { user, setUser } = useContext(UserDataContext);
+  
+
+
+
+  useEffect(() => {
+    
+      console.log(user);
+       socket.emit("join",{userType:"user", userId:user._id})
+    
+  },[user] )
+
   const submitHandler = (e) => {
     e.preventDefault();
 

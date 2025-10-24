@@ -1,15 +1,22 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 
 export const UserDataContext = createContext();
 
 const UserContext = ({ children }) => {
-  const [user, setUser] = useState({
-    email: "",
-    fullName: {
-      firstName: "",
-      lastName: "",
-    },
-  });
+const storedUser = JSON.parse(localStorage.getItem("user")) || {
+  email: "",
+  fullName: { firstName: "", lastName: "" },
+};
+
+const [user, setUser] = useState(storedUser);
+
+// Whenever user changes, update localStorage
+useEffect(() => {
+  if (user && user.email) {
+    localStorage.setItem("user", JSON.stringify(user));
+  }
+}, [user]);
+
 
   return (
     <div>

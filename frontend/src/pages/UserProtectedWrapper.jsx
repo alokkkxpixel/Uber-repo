@@ -5,37 +5,40 @@ import axios from "axios";
 
 const UserProtectedWrapper = ({ children }) => {
   const { user, setUser } = useContext(UserDataContext);
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  // console.log(token);
+  console.log(user)
 
   useEffect(() => {
     if (!token) {
       navigate("/login");
+      return;
     }
-  }, [token, navigate]);
-  axios
-    .get(`${import.meta.env.VITE_BASE_URL}/users/profile`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then((response) => {
-      if (response.status === 200) {
-        setUser(response.data.user);
-        setIsLoading(false);
-        navigate("/home");
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      localStorage.removeItem("token");
-      navigate("/login");
-    });
-  if (isLoading === true) {
-    return <div>Loading...</div>;
-  }
+
+    axios
+      .get(`${import.meta.env.VITE_BASE_URL}/users/profile`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        if (response.status === 200 && response.data?.user) {
+          setUser(response.data);
+          // setIsLoading(false);
+          navigate("/home");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        localStorage.removeItem("token");
+        navigate("/login");
+      });
+  }, [token, navigate, setUser]);
+
+
+
+  // if (isLoading) {
+    // return <div>Loading...</div>;
+  // }
 
   return <>{children}</>;
 };

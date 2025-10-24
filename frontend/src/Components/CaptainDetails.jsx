@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import { IoIosLogOut } from "react-icons/io";
 import { MdOutlineSpeed } from "react-icons/md";
 import { LuNotebookText } from "react-icons/lu";
+import {CaptainDataContext} from "../context/CaptainContext";
+   
+
+
 const CaptainDetails = () => {
+
+   const {captain,setCaptain} =  useContext(CaptainDataContext)
+ console.log(captain)
   return (
     <div>
       <div className="flex items-center justify-between px-2">
@@ -12,7 +19,7 @@ const CaptainDetails = () => {
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMdBuvbsYu7WYAAUY2AqSQRGNESsYdkucDkQ&s"
             alt=""
           />
-          <h4 className="font-bold text-lg">Ayush Pithale</h4>
+          <h4 className="font-bold text-lg">{captain?.fullname?.firstName + " " + captain?.fullname?.lastName || "captain"} </h4>
         </div>
         <div className=" flex flex-col ">
           <h1 className="text-xl font-bold">$209.50</h1>

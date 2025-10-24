@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { FaHome } from "react-icons/fa";
@@ -10,12 +10,27 @@ import { Link } from "react-router-dom";
 import CaptainDetails from "../Components/CaptainDetails";
 import Ridepop from "../Components/Ridepop";
 import ConfirmRidePop from "../Components/ConfirmRidePop";
+import { SocketContext } from "../context/SocketContext";
+import { CaptainDataContext } from "../context/CaptainContext";
 
 const CaptainHome = () => {
   const [ridePopupPannel, setridePopupPannel] = useState(true);
   const [ConfirmridePopupPannel, setConfirmridePopupPannel] = useState(false);
   const RideRef = useRef(null);
   const ConfirmRideRef = useRef(null);
+
+
+   const {socket} = useContext(SocketContext)
+   const {captain} = useContext(CaptainDataContext)
+
+
+   useEffect(()=>{
+     
+    console.log(captain)
+      socket.emit("join", {  userId: captain._id , userType:"captain"})
+
+   })
+
 
   useGSAP(
     function () {
