@@ -11,7 +11,12 @@ const captainRoutes = require("./routes/captain.route");
 const mapRoutes = require("./routes/maps.route");
 const rideRoutes = require("./routes/ride.route");
 connectedToDB();
-app.use(cors());
+
+app.use(cors({
+  origin: "*", // or specific domain if needed
+  credentials: true,
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());

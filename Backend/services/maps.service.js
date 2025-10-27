@@ -1,4 +1,5 @@
 const axios = require("axios");
+const captainModel = require("../model/captain.model");
 // const { route } = require("../routes/maps.route");
 
 module.exports.getAddressCoordinate = async (address) => {
@@ -142,3 +143,21 @@ module.exports.getAddressAutoComplete = async (input) => {
     throw new Error("Error fetching data from Geoapify API");
   }
 };
+
+module.exports.getCaptainsInTheRadius = async( ltd ,lng , radius) =>{
+
+
+  // radius  in KM 
+
+
+  const captain = await captainModel.find({
+
+    location:{
+      $geoWithin:{
+        $centerSphere: [ [ ltd, lng ] , radius / 6378.1 ]
+    }
+
+  }
+    })
+ return captain
+  }
