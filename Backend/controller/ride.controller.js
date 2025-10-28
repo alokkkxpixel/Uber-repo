@@ -36,7 +36,7 @@ module.exports.createRide = async (req, res) => {
  
     
    console.log("ride user", rideWithUser.userId)
-
+   
     captainsINRadius.map((captain)=>{
 
       sendMessageToSocketId(captain.socketId,{
@@ -84,3 +84,39 @@ module.exports.getFareRide = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+
+module.exports.confirmRide = async (req,res) => {
+
+  const error = validationResult(req)
+
+  
+  if(!error.isEmpty()){
+    return res.status(400).json({error:error.array()})
+  }
+    console.log("Headers:", req.headers);
+
+  const {rideId,captainId} = req.body
+   console.log("captain", captainId)
+  console.log("Incoming confirm ride body:", req.body);
+
+  try {
+  
+    const ride = await rideService.confirmRide(rideId, captainId)
+
+    
+     sendMessageToSocketId(ride.userId.socketId,{
+      event:"ride-confirmed",
+      data:ride
+     })
+
+    return res.status(200).json({ride})
+
+ 
+  } catch (err) {
+    console.log(err || err.message)
+    return res.status(500).json({message:err.message})
+    
+  }
+
+}

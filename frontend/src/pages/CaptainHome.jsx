@@ -12,12 +12,14 @@ import Ridepop from "../Components/Ridepop";
 import ConfirmRidePop from "../Components/ConfirmRidePop";
 import { SocketContext } from "../context/SocketContext";
 import { CaptainDataContext } from "../context/CaptainContext";
+import axios from "axios";
 
 const CaptainHome = () => {
-  const [ridePopupPannel, setridePopupPannel] = useState(true);
+  const [ridePopupPannel, setridePopupPannel] = useState(false);
   const [ConfirmridePopupPannel, setConfirmridePopupPannel] = useState(false);
   const RideRef = useRef(null);
   const ConfirmRideRef = useRef(null);
+ const [passenger, setPassenger] = useState({})
 
 
    const {socket} = useContext(SocketContext)
@@ -56,6 +58,47 @@ const CaptainHome = () => {
 
     return ()=> clearInterval(locationInterval)
    })
+
+  socket.on("New-ride-available", (data) => {
+   console.log("ride data", data)
+
+   setPassenger(data)
+   setridePopupPannel(true)
+  })
+
+
+  async function ConfirmRide() {
+
+     console.log("Token:", localStorage.getItem("token"));
+  console.log("Passenger:", passenger);
+  console.log("Captain:", captain);
+
+  try {
+    const res = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/rides/confirm`,
+      {
+        rideId: passenger?._id,
+        captainId: captain?._id,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+
+    console.log("Confirm ride response:", res.data);
+    
+    setConfirmridePopupPannel(true);
+    setridePopupPannel(false);
+  } catch (err) {
+    console.error("Confirm ride error:", err.response?.data || err.message);
+  }
+
+
+
+
+  }
 
 
   useGSAP(
@@ -129,6 +172,9 @@ const CaptainHome = () => {
         className="fixed w-full z-10 bottom-0 translate-y-100 bg-white px-3 py-10 pt-12"
       >
         <Ridepop
+          passenger={passenger}
+        comfirmRide={ConfirmRide}
+
           setConfirmridePopupPannel={setConfirmridePopupPannel}
           setridePopupPannel={setridePopupPannel}
         />
@@ -138,6 +184,7 @@ const CaptainHome = () => {
         className="fixed h-screen w-full z-10 bottom-0 translate-y-100 bg-white px-3 py-10 pt-12"
       >
         <ConfirmRidePop
+        passenger={passenger}
           setConfirmridePopupPannel={setConfirmridePopupPannel}
           setridePopupPannel={setridePopupPannel}
         />

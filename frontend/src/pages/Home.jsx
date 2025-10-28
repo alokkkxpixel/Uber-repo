@@ -54,6 +54,12 @@ const Home = () => {
     
   },[user] )
 
+  socket.on("ride-confirmed",ride =>{
+    setWaitingDriver(true)
+    setLookingDriver(false)
+    
+  })
+
   const submitHandler = (e) => {
     e.preventDefault();
 

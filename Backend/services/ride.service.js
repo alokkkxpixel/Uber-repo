@@ -129,7 +129,32 @@ async function createRide({ Pickup, Destination, userId, vehicleType }) {
   }
 }
 
+async function confirmRide(rideId,captainId) {
+
+  if(!rideId || !captainId){
+     throw new Error("rideId and captainId are required")
+  }
+ 
+   try {
+     
+    await rideModel.findByIdAndUpdate({_id:rideId},{
+      status:"accepted",
+      captain:captainId
+    })
+  const ride  = await rideModel.findOne({_id:rideId}).populate("userId")
+
+  if(!ride){
+    throw new Error ("Ride not founed")
+  }
+    return ride;
+
+   } catch (err) {
+  console.log(err)    
+   }
+
+}
 module.exports = {
   getFare,
   createRide,
+  confirmRide
 };
