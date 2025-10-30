@@ -2,6 +2,7 @@ const { model } = require("mongoose");
 const { getDistanceAndTime } = require("./maps.service");
 const rideModel = require("../model/ride.model");
 const crypto = require("crypto");
+const { sendMessageToSocketId } = require("../socket");
 
 async function getFare(pickup, destination, vehicleType) {
   if (!pickup || !destination) {
@@ -141,7 +142,7 @@ async function confirmRide(rideId,captainId) {
       status:"accepted",
       captain:captainId
     })
-  const ride  = await rideModel.findOne({_id:rideId}).populate("userId")
+  const ride  = await rideModel.findOne({_id:rideId}).populate("userId").populate("captain")
 
   if(!ride){
     throw new Error ("Ride not founed")
@@ -153,8 +154,52 @@ async function confirmRide(rideId,captainId) {
    }
 
 }
+
+async function startRide({rideId ,otp, captain}) {
+   console.log(rideId, otp)
+  if(!rideId || !otp){
+    throw new Error("rideId and otp are required")
+  }
+ 
+  try {
+ 
+    const ride =  await rideModel.findOne({_id:rideId}).populate("userId").populate("captain").select("+otp")
+
+    if(!ride){
+      throw new Error ("Ride not  founed")
+    }
+
+    if(ride.otp !== otp){
+      throw new Error("Invalid otp")
+    }
+   console.log("Ride status:", ride.status);
+    if(ride.status !== "accepted"){
+      throw new Error("Ride not accepted yet")
+    }
+
+     await rideModel.findOneAndUpdate({_id:rideId},{
+      status:"ongoing"
+     })
+
+ 
+     sendMessageToSocketId(ride.userId.socketId,{
+      event:"ride-started",
+      data:ride
+     })
+
+     return ride
+
+    
+  } catch (err) {
+    console.log(err)
+    
+  }
+  
+
+}
 module.exports = {
   getFare,
   createRide,
-  confirmRide
+  confirmRide,
+  startRide
 };

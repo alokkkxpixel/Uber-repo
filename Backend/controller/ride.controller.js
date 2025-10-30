@@ -120,3 +120,28 @@ module.exports.confirmRide = async (req,res) => {
   }
 
 }
+
+module.exports.startRide = async (req,res) => {
+
+  const error = validationResult(req)
+
+  if(!error.isEmpty()){
+    res.status(400).json({error:error.array()})
+  }
+
+  const {rideId , otp} = req.query
+  const {captain} = req.captain
+  console.log("req.query",req.query )
+  try {
+    
+    const ride = await rideService.startRide({rideId , otp, captain})
+
+
+
+     res.status(200).json({ride})
+
+   
+  } catch (err) {
+     console.log(err)
+  }
+}

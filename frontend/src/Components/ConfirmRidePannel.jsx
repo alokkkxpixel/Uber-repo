@@ -5,6 +5,9 @@ import { FaCreditCard } from "react-icons/fa";
 import { RiStopMiniFill } from "react-icons/ri";
 import { GiPathDistance } from "react-icons/gi";
 import { IoSpeedometer } from "react-icons/io5";
+import Carpng  from "../assets/car.webp"
+import autoPng from "../assets/auto.webp";
+import motoPng from "../assets/moto.webp"
 const ConfirmRidePannel = (props) => {
   return (
     <div>
@@ -23,19 +26,19 @@ const ConfirmRidePannel = (props) => {
         {props.vehicleType === "car" ? (
           <img
             className="w-40 my-2"
-            src="https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_538,w_956/v1688398986/assets/90/34c200-ce29-49f1-bf35-e9d250e8217a/original/UberX.png"
+            src={Carpng}
             alt="Car"
           />
         ) : props.vehicleType === "auto" ? (
           <img
             className="w-40 my-2"
-            src="https://cn-geo1.uber.com/image-proc/crop/resizecrop/udam/format=auto/width=552/height=368/srcb64=aHR0cHM6Ly90Yi1zdGF0aWMudWJlci5jb20vcHJvZC91ZGFtLWFzc2V0cy8xZGRiOGM1Ni0wMjA0LTRjZTQtODFjZS01NmExMWEwN2ZlOTgucG5n"
+            src={autoPng}
             alt="Auto"
           />
         ) : (
           <img
             className="w-40 my-2"
-            src="https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_368,w_552/v1649231091/assets/2c/7fa194-c954-49b2-9c6d-a3b8601370f5/original/Uber_Moto_Orange_312x208_pixels_Mobile.png"
+            src={motoPng}
             alt="Moto"
           />
         )}

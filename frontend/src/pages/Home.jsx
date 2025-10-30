@@ -13,7 +13,10 @@ import { useContext } from "react";
 import { SocketContext } from "../context/SocketContext";
 import { useEffect } from "react";
 import { UserDataContext } from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
+
 const Home = () => {
+  const navigate =  useNavigate()
   const [Pickup, setPickup] = useState("");
   const [Destination, setDestination] = useState("");
   const pannelRef = useRef(null);
@@ -36,8 +39,8 @@ const Home = () => {
   const WaitingDriverRef = useRef(null);
   const waitaingDriverArrowRef = useRef(null);
   const ArrowDown = useRef(null);
-
-
+ 
+const [ride, setRide] = useState(null)    
 
 
   const { socket} = useContext(SocketContext)
@@ -57,8 +60,18 @@ const Home = () => {
   socket.on("ride-confirmed",ride =>{
     setWaitingDriver(true)
     setLookingDriver(false)
+    console.log("ride socket ",ride)
+    setRide(ride)
     
+    console.log(ride)
   })
+
+ socket.on("ride-started",ride =>{
+  setWaitingDriver(false)
+  console.log(ride)
+  navigate("/ride")
+   
+ })
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -346,7 +359,10 @@ const Home = () => {
         className="fixed translate-y-200 bg-white w-full p-3 bottom-0 z-10 py-8"
       >
         <WaitingForDriver
-          waitaingDriverArrowRef={waitaingDriverArrowRef}
+    ride={ride}
+     otp={otp}
+     vehicleType={vehicleType}
+waitaingDriverArrowRef={waitaingDriverArrowRef}
           setWaitingDriver={setWaitingDriver}
         />
       </div>

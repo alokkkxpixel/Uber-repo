@@ -1,12 +1,37 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { FaCreditCard, FaLocationDot } from "react-icons/fa6";
 import { RiStopMiniFill } from "react-icons/ri";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const ConfirmRidePop = (props) => {
   const [Otp, setOtp] = useState("");
-
-  const submitHandler = (e) => {
+ 
+ const navigate =  useNavigate()
+  const submitHandler = async(e) => {
     e.preventDefault();
+   const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/rides/start-ride`,
+    {
+      params:{
+
+        rideId:props.passenger?._id,
+        otp:Otp,
+      },
+       headers:{
+      Authorization:`Bearer ${localStorage.getItem("token")}`
+    }
+   },
+   
+   )
+
+   console.log("Start ride response", res.data)
+
+   if(res.status === 200){
+    props.setConfirmridePopupPannel(false);
+    props.setridePopupPannel(false);
+
+    navigate("/captain-riding")
+
+   }
   };
 
   return (
@@ -79,15 +104,13 @@ const ConfirmRidePop = (props) => {
             className="w-full py-3 px-10 my-5 flex items-center justify-center font-mono text-lg outline-none text-black  bg-zinc-200  rounded-lg "
             placeholder="Enter OTP"
           />
-          <Link
-            to="/captain-riding"
-            onClick={() => {
-              // props.comfirmRide();
-            }}
+          <button
+            
+           
             className="w-full flex items-center justify-center rounded-md bg-green-400 py-2 px-3 text-xl text-white font-semibold"
           >
             Confirm Ride
-          </Link>
+          </button>
           <button
             onClick={() => {
               props.setConfirmridePopupPannel(false);

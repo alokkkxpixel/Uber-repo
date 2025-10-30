@@ -1,4 +1,7 @@
 import React from "react";
+import Carpng  from "../assets/car.webp"
+import autoPng from "../assets/auto.webp";
+import motoPng from "../assets/moto.webp"
 
 const VehiclePannel = (props) => {
   return (
@@ -23,7 +26,7 @@ const VehiclePannel = (props) => {
       >
         <img
           className="w-20"
-          src="https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_538,w_956/v1688398986/assets/90/34c200-ce29-49f1-bf35-e9d250e8217a/original/UberX.png"
+          src={Carpng}
           alt=""
         />
         <div
@@ -52,7 +55,7 @@ const VehiclePannel = (props) => {
       >
         <img
           className="w-20"
-          src="https://w7.pngwing.com/pngs/739/731/png-transparent-bajaj-auto-auto-rickshaw-car-india-auto-rickshaw-vintage-car-mode-of-transport-vehicle.png"
+          src={autoPng}
           alt="Auto"
         />
         <div
@@ -81,7 +84,7 @@ const VehiclePannel = (props) => {
       >
         <img
           className="w-20"
-          src="https://cn-geo1.uber.com/image-proc/crop/resizecrop/udam/format=auto/width=552/height=368/srcb64=aHR0cHM6Ly90Yi1zdGF0aWMudWJlci5jb20vcHJvZC91ZGFtLWFzc2V0cy9mY2RkZWNhYS0yZWVlLTQ4ZmUtODdmMC02MTRhYTdjZWU3ZDMucG5n"
+          src={motoPng}
           alt="MoTo"
         />
         <div

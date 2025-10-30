@@ -1,7 +1,10 @@
 import React from "react";
 import { FaCreditCard, FaLocationDot } from "react-icons/fa6";
+import { IoCalendarNumberSharp } from "react-icons/io5";
 import { RiStopMiniFill } from "react-icons/ri";
-
+import Carpng  from "../assets/car.webp"
+import autoPng from "../assets/auto.webp";
+import motoPng from "../assets/moto.webp"
 const WaitingForDriver = (props) => {
   return (
     <div>
@@ -19,14 +22,31 @@ const WaitingForDriver = (props) => {
       </h1>
       <div className="flex flex-col mb-5 items-center">
         <div className="flex w-full items-center justify-between my-3 bg--400">
-          <img
-            className="w-30"
-            src="https://www.uber-assets.com/image/upload/f_auto,q_auto:eco,c_fill,h_538,w_956/v1688398986/assets/90/34c200-ce29-49f1-bf35-e9d250e8217a/original/UberX.png"
-            alt=""
-          />
+          {props.vehicleType === "car" ? (
+            <img
+
+              className="w-40 my-2"
+              src={Carpng}
+              alt="Car"
+            />
+          ) : props.vehicleType === "auto" ? (
+            <img
+
+              className="w-40 my-2"
+              src={autoPng}
+              alt="Auto"
+            />
+          ) : (
+            <img
+
+              className="w-40 my-2"
+              src={motoPng}
+              alt="Moto"
+            />
+          )}
           <div className="flex flex-col items-end">
-            <h2 className="text-lg -mb-2 font-medium">Alokk pithale</h2>
-            <h4 className="text-2xl font-semibold">MH130-4h-56</h4>
+            <h2 className="text-xl mb-1 font-semibold">{props.ride?.captain?.fullname.firstName + " " + props.ride?.captain?.fullname.lastName}</h2>
+            <h4 className="text-2xl font-semibold">{props.ride?.captain?.vehicle?.plate}</h4>
             <p className="text-base text-zinc-800">banglore,india</p>
           </div>
         </div>
@@ -37,10 +57,9 @@ const WaitingForDriver = (props) => {
                 <FaLocationDot />
               </h3>
               <div className=" flex flex-col py-2 ">
-                <h4 className="text-2xl font-semibold"> 524/11-A</h4>
-                <p className=" font-medium text-zinc-700 ">
-                  Narendra nagar nagpur near airport maharathi hotel
-                  banglore,Karnatakka
+                <h4 className="text-lg font-semibold">Pickup</h4>
+                <p className=" font-medium capitalize text-xl text-zinc-700 ">
+                  {props.ride?.Pickup}
                 </p>
               </div>
             </div>
@@ -51,10 +70,9 @@ const WaitingForDriver = (props) => {
                 <RiStopMiniFill />
               </h3>
               <div className=" flex flex-col py-2 ">
-                <h4 className="text-2xl font-semibold"> Trunk Book Nagpur</h4>
-                <p className=" font-medium text-zinc-700 ">
-                  Narendra nagar nagpur near airport maharathi hotel
-                  banglore,Karnatakka
+                <h4 className="text-lg font-semibold">Destination</h4>
+                <p className=" font-medium text-xl text-zinc-700 ">
+                  {props.ride?.Destination}
                 </p>
               </div>
             </div>
@@ -65,9 +83,30 @@ const WaitingForDriver = (props) => {
                 <FaCreditCard />
               </h3>
               <div className=" flex flex-col py-2 ">
-                <h4 className="text-2xl font-bold"> $193.20</h4>
+                <h4 className="text-2xl font-bold">${props.ride?.fare}</h4>
                 <p className="text-lg font-medium text-zinc-700 ">
                   Only Cash recive
+                </p>
+              </div>
+              <div className=" flex flex-col py-2 ">
+                <h4 className="text-2xl capitalize  font-bold">{props.ride?.vehicleType}</h4>
+                <p className="text-lg font-medium text-zinc-700 ">
+                  Vehicle Type
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="w-full py-2  bg-zinc-50 ">
+            <div className="flex    items-center gap-5">
+              <h3 className=" p-2 text-2xl rounded-full bg-zinc-200">
+                <IoCalendarNumberSharp/>
+              </h3>
+              <div className=" flex items-center gap-5 py-2 ">
+                <h4 className="text-2xl px-3 py-2 rounded-lg bg-zinc-300 font-bold">
+                  {props.otp ? props.otp : "loading..."}
+                </h4>
+                <p className="text-lg font-medium text-zinc-700 ">
+                  OTP for Driver
                 </p>
               </div>
             </div>

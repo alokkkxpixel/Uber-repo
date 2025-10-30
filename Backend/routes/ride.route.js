@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { body, query } = require("express-validator");
-const { createRide, getFareRide, confirmRide } = require("../controller/ride.controller");
+const { createRide, getFareRide, confirmRide, startRide } = require("../controller/ride.controller");
 const { authUserMiddleware, authCaptainMiddleware } = require("../middleware/auth.middleware");
 
 router.post(
@@ -42,6 +42,13 @@ router.post("/confirm",
 
  confirmRide
 
+)
+
+router.get("/start-ride",
+  authCaptainMiddleware,
+  query("rideId").isString().notEmpty(),
+  query("otp").notEmpty().isLength({min:3}),
+  startRide
 )
 
 module.exports = router;
