@@ -7,6 +7,7 @@ const {
   getDistaneTime,
   getAddressAutoComplete,
 } = require("../controller/maps.controller");
+const userModel = require("../model/user.model");
 
 router.get(
   "/get-coordinate",
@@ -33,4 +34,12 @@ router.get(
   authUserMiddleware,
   getAddressAutoComplete
 );
+router.post("/update-location", async (req, res) => {
+  const { lat, lng, userId } = req.body;
+
+  await userModel.updateOne({ _id: userId }, { location: { lat, lng } });
+
+  res.status(200).json({ success: true });
+});
+
 module.exports = router;

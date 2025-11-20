@@ -1,1 +1,8 @@
 @import "tailwindcss";
+
+.leaflet-container {
+  z-index: 1 ; 
+}
+/* Keep markers and controls above */
+.leaflet-control-container,
+.leaflet-marker-pane,

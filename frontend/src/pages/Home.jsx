@@ -14,6 +14,7 @@ import { SocketContext } from "../context/SocketContext";
 import { useEffect } from "react";
 import { UserDataContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import LiveTracking from "../Components/LiveTracking";
 
 const Home = () => {
   const navigate =  useNavigate()
@@ -237,14 +238,12 @@ const [ride, setRide] = useState(null)
         srcset=""
       />
       <div className="h-screen w-full   ">
-        <img
-          className="h-full w-full object-cover"
-          src="https://c8.alamy.com/comp/2YG9G22/herbede-regierungsbezirk-arnsberg-de-germany-north-rhine-westphalia-n-51-25-17-n-7-16-45-map-cartascapes-map-published-in-2024-explore-cartascapes-a-map-revealing-earths-diverse-landscapes-cultures-and-ecosystems-journey-through-time-and-space-discovering-the-interconnectedness-of-our-planets-past-present-and-future-2YG9G22.jpg"
-          alt=""
-        />
+        <LiveTracking />
       </div>
-      <div className=" top-0 flex flex-col justify-end absolute h-screen w-full ">
-        <div className="bg-white relative h-[30%] p-5">
+      <div className=" top-0 z-10 flex flex-col justify-end absolute h-screen w-full ">
+         {/* ❗Empty area above bottom panel (should not block map) */}
+  <div className="flex-1 pointer-events-non"></div>
+        <div className="bg-white relative h-[30%] p-5 pointer-events-aut">
           <h5 className="  absolute top-2 right-3 text-3xl">
             <i
               onClick={() => {
