@@ -1,13 +1,20 @@
 import React, { useRef, useState } from "react";
 import { IoIosLogOut } from "react-icons/io";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { BsChevronCompactUp } from "react-icons/bs";
 import FinishedRide from "../Components/FinishedRide";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 const CaptainRiding = () => {
+  
   const finishedRideRef = useRef(null);
   const [finishedRide, setfinishedRide] = useState(false);
+
+  const location = useLocation()
+
+  const {rideData} = location.state || {}
+
+  console.log("ride data",rideData)
   useGSAP(
     function () {
       if (finishedRide) {
@@ -66,7 +73,7 @@ const CaptainRiding = () => {
         ref={finishedRideRef}
         className="fixed  w-full z-10 bottom-0 translate-y-100 bg-white px-3 py-10 pt-12"
       >
-        <FinishedRide setfinishedRide={setfinishedRide} />
+        <FinishedRide  ride={rideData} setfinishedRide={setfinishedRide} />
       </div>
     </div>
   );

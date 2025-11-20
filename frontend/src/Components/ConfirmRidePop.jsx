@@ -2,10 +2,11 @@ import axios from "axios";
 import React, { useState } from "react";
 import { FaCreditCard, FaLocationDot } from "react-icons/fa6";
 import { RiStopMiniFill } from "react-icons/ri";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 const ConfirmRidePop = (props) => {
   const [Otp, setOtp] = useState("");
  
+  const location = useLocation()
  const navigate =  useNavigate()
   const submitHandler = async(e) => {
     e.preventDefault();
@@ -29,7 +30,7 @@ const ConfirmRidePop = (props) => {
     props.setConfirmridePopupPannel(false);
     props.setridePopupPannel(false);
 
-    navigate("/captain-riding")
+    navigate("/captain-riding", {state :{rideData:res.data}})
 
    }
   };

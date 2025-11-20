@@ -69,7 +69,13 @@ const [ride, setRide] = useState(null)
  socket.on("ride-started",ride =>{
   setWaitingDriver(false)
   console.log(ride)
-  navigate("/ride")
+  try {
+    // persist ride in localStorage as a fallback in case navigation state isn't preserved
+    localStorage.setItem("currentRide", JSON.stringify(ride));
+  } catch (e) {
+    console.warn("Could not persist ride to localStorage", e);
+  }
+  navigate("/ride" ,{state:{ride}})
    
  })
 

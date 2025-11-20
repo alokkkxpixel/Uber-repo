@@ -1,10 +1,37 @@
 import React from "react";
+import { useEffect } from "react";
 import { FaHome } from "react-icons/fa";
 import { FaCreditCard, FaLocationDot } from "react-icons/fa6";
 import { RiStopMiniFill } from "react-icons/ri";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Ridinguser = () => {
+
+  const location = useLocation();
+
+  // Prefer navigation state, but fallback to localStorage so the page works on refresh
+  const ride = location.state?.ride ?? (() => {
+    try {
+      const stored = localStorage.getItem("currentRide");
+      return stored ? JSON.parse(stored) : null;
+    } catch (e) {
+      console.warn("Failed to parse stored ride", e);
+      return null;
+    }
+  })();
+
+  // clear the fallback after we read it so it doesn't persist unnecessarily
+  useEffect(() => {
+    if (ride) {
+      try {
+        localStorage.removeItem("currentRide");
+      } catch (e) {
+        console.warn("Failed to remove currentRide", e);
+      }
+    }
+  }, [ride]);
+
+  console.log("user riding", ride);
   return (
     <div className="h-screen">
       <div className="h-1/2 w-full relative  ">
@@ -31,9 +58,9 @@ const Ridinguser = () => {
               alt=""
             />
             <div className="flex flex-col items-end">
-              <h2 className="text-lg -mb-2 font-medium">Alokk pithale</h2>
-              <h4 className="text-2xl font-semibold">MH130-4h-56</h4>
-              <p className="text-base text-zinc-800">banglore,india</p>
+              <h2 className="text-lg -mb-2 font-medium">{ride.captain.fullname.firstName + ' ' + ride.captain.fullname.lastName}</h2>
+              <h4 className="text-2xl font-semibold">{ride.captain.vehicle?.plate}</h4>
+              <p className="text-base text-zinc-800">{ride.Pickup}</p>
             </div>
           </div>
           <div className="flex flex-col w-full items-center border-t border-zinc-400">
@@ -43,10 +70,9 @@ const Ridinguser = () => {
                   <FaLocationDot />
                 </h3>
                 <div className=" flex flex-col py-2 ">
-                  <h4 className="text-2xl font-semibold"> 524/11-A</h4>
+                  <h4 className="text-xl font-semibold">Destination</h4>
                   <p className=" font-medium text-zinc-700 ">
-                    Narendra nagar nagpur near airport maharathi hotel
-                    banglore,Karnatakka
+                   {ride.Pickup}
                   </p>
                 </div>
               </div>
@@ -58,7 +84,7 @@ const Ridinguser = () => {
                   <FaCreditCard />
                 </h3>
                 <div className=" flex flex-col py-2 ">
-                  <h4 className="text-2xl font-bold"> $193.20</h4>
+                  <h4 className="text-2xl font-bold">${ride.fare}</h4>
                   <p className="text-lg font-medium text-zinc-700 ">
                     Only Cash recive
                   </p>

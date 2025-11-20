@@ -4,6 +4,8 @@ import { RiStopMiniFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 
 const FinishedRide = (props) => {
+
+  console.log(props.ride)
   return (
     <div>
       <h1 className="text-2xl capitalize font-semibold mb-4">
@@ -16,7 +18,7 @@ const FinishedRide = (props) => {
             src="https://media.istockphoto.com/id/1664876848/photo/happy-crossed-arms-and-portrait-of-asian-man-in-studio-smile-for-career-work-and-job.jpg?s=612x612&w=0&k=20&c=2vYaOMnlmzMEmB441bTWHUyeFXRIh56wE79QAhVWYBk="
             alt=""
           />
-          <h2 className="text-lg font-semibold">Alokk pithale</h2>
+          <h2 className="text-lg font-semibold">{props.ride.userId?.fullname?.firstName }</h2>
         </div>
         <h5 className="text-lg font-semibold">2.2 KM</h5>
       </div>
@@ -28,10 +30,9 @@ const FinishedRide = (props) => {
                 <FaLocationDot />
               </h3>
               <div className=" flex flex-col py-2 ">
-                <h4 className="text-xl font-semibold"> 524/11-A</h4>
+                <h4 className="text-xl font-semibold">Pickup</h4>
                 <p className=" font-medium text-zinc-700 ">
-                  Narendra nagar nagpur near airport maharathi hotel
-                  banglore,Karnatakka
+                 {props.ride.ride.Pickup}
                 </p>
               </div>
             </div>
@@ -42,10 +43,9 @@ const FinishedRide = (props) => {
                 <RiStopMiniFill />
               </h3>
               <div className=" flex flex-col py-2 ">
-                <h4 className="text-xl font-semibold"> Trunk Book Nagpur</h4>
+                <h4 className="text-xl font-semibold">Destination</h4>
                 <p className=" font-medium text-zinc-700 ">
-                  Narendra nagar nagpur near airport maharathi hotel
-                  banglore,Karnatakka
+                  {props.ride.ride.Destination}
                 </p>
               </div>
             </div>
@@ -56,7 +56,7 @@ const FinishedRide = (props) => {
                 <FaCreditCard />
               </h3>
               <div className=" flex flex-col py-2 ">
-                <h4 className="text-2xl font-bold"> $193.20</h4>
+                <h4 className="text-2xl font-bold">${props.ride.ride.fare}</h4>
                 <p className="text-lg font-medium text-zinc-700 ">
                   Only Cash recive
                 </p>
