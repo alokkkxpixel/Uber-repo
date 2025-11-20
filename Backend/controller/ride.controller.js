@@ -137,6 +137,10 @@ module.exports.startRide = async (req,res) => {
     const ride = await rideService.startRide({rideId , otp, captain})
 
 
+      sendMessageToSocketId(ride.userId.socketId,{
+      event:"ride-started",
+      data:ride
+     })
 
      res.status(200).json({ride})
 
@@ -144,4 +148,44 @@ module.exports.startRide = async (req,res) => {
   } catch (err) {
      console.log(err)
   }
+}
+
+
+module.exports.endRide = async (req,res) => {
+ 
+  const error = validationResult(req)
+
+  if(!error.isEmpty()){
+   return res.status(400).json({error:error.array()})
+  }
+
+  const {rideId} = req.body
+  // const captainId = req.captain._id
+    console.log("req captain",req.captain)
+  try {
+    
+    const ride  = await rideService.endRideService({rideId, captain:req.captain})
+ 
+     console.log("ride",ride)
+  if (!ride.userId || !ride.userId.socketId) {
+  console.warn("Socket ID missing for user:", ride.userId);
+} else {
+  sendMessageToSocketId(ride.userId.socketId, {
+    event: "ride-ended",
+    data: ride
+  });
+}
+
+
+
+
+    return res.status(200).json({ride}
+
+      
+    )
+  } catch (err) {
+      console.log(err || err.message)
+    return res.status(500).json({message:err.message})
+  }
+  
 }

@@ -3,11 +3,20 @@ import { useEffect } from "react";
 import { FaHome } from "react-icons/fa";
 import { FaCreditCard, FaLocationDot } from "react-icons/fa6";
 import { RiStopMiniFill } from "react-icons/ri";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import {SocketContext} from "../context/SocketContext"
+import { useContext } from "react";
 
 const Ridinguser = () => {
 
   const location = useLocation();
+
+    const { socket } = useContext(SocketContext)
+    const navigate = useNavigate()
+
+    socket.on("ride-ended", () => {
+        navigate('/home')
+    })
 
   // Prefer navigation state, but fallback to localStorage so the page works on refresh
   const ride = location.state?.ride ?? (() => {

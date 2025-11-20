@@ -177,9 +177,11 @@ async function startRide({rideId ,otp, captain}) {
       throw new Error("Ride not accepted yet")
     }
 
-     await rideModel.findOneAndUpdate({_id:rideId},{
-      status:"ongoing"
-     })
+     await rideModel.findOneAndUpdate({
+        _id: rideId
+    }, {
+        status: 'ongoing'
+    })
 
  
      sendMessageToSocketId(ride.userId.socketId,{
@@ -187,8 +189,8 @@ async function startRide({rideId ,otp, captain}) {
       data:ride
      })
 
-     return ride
-
+    
+ return ride
     
   } catch (err) {
     console.log(err)
@@ -197,9 +199,41 @@ async function startRide({rideId ,otp, captain}) {
   
 
 }
+
+async function endRideService({rideId , captain}) {
+
+if (!rideId) {
+        throw new Error('Ride id is required');
+    }
+
+    const ride = await rideModel.findOne({
+        _id: rideId,
+        captain: captain._id
+    }).populate('userId').populate('captain').select('+otp');
+
+    if (!ride) {
+        throw new Error('Ride not found');
+    }
+
+    if (ride.status !== 'ongoing') {
+        throw new Error('Ride not ongoing');
+    }
+
+    await rideModel.findOneAndUpdate({
+        _id: rideId
+    }, {
+        status: 'completed'
+    })
+
+    return ride;
+}
+  
+
+
 module.exports = {
   getFare,
   createRide,
   confirmRide,
-  startRide
+  startRide,
+  endRideService
 };

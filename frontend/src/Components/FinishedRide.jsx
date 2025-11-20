@@ -1,9 +1,31 @@
 import React from "react";
 import { FaCreditCard, FaLocationDot } from "react-icons/fa6";
 import { RiStopMiniFill } from "react-icons/ri";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios"
 
 const FinishedRide = (props) => {
+
+  const navigate = useNavigate()
+
+  console.log("ride" , props.ride.ride)
+   async function endRide() {
+        const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/end-ride`, {
+
+            rideId: props.ride.ride._id
+
+
+        }, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+
+        if (response.status === 200) {
+            navigate('/captain-home')
+        }
+
+    }
 
   console.log(props.ride)
   return (
@@ -18,7 +40,7 @@ const FinishedRide = (props) => {
             src="https://media.istockphoto.com/id/1664876848/photo/happy-crossed-arms-and-portrait-of-asian-man-in-studio-smile-for-career-work-and-job.jpg?s=612x612&w=0&k=20&c=2vYaOMnlmzMEmB441bTWHUyeFXRIh56wE79QAhVWYBk="
             alt=""
           />
-          <h2 className="text-lg font-semibold">{props.ride.userId?.fullname?.firstName }</h2>
+          <h2 className="text-lg font-semibold">{props.ride?.ride?.userId?.fullname.firstName + " " +props.ride?.ride?.userId?.fullname.lastName  }</h2>
         </div>
         <h5 className="text-lg font-semibold">2.2 KM</h5>
       </div>
@@ -66,15 +88,12 @@ const FinishedRide = (props) => {
         </div>
       </div>
       <div className="mt-6">
-        <Link
-          to="/captain-home"
-          onClick={() => {
-            props.setfinishedRide(false);
-          }}
+        <button
+        onClick={endRide} 
           className="w-full flex items-center justify-center mt-3 rounded-md bg-green-500 py-2 px-3 text-xl text-white font-semibold"
         >
           Finish Ride
-        </Link>
+        </button>
         <p className="text-xs text-center text-red-500 mt-5 ">
           Click on Finish ride Button if you have completed the payment.
         </p>
